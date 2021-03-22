@@ -26,7 +26,7 @@ Deadlines are given in the individual assignment instructions. These deadlines a
 
 ## Libraries
 
-You are free to use all functionality provided by the Python standard library and `numpy`. However you are **not allowed to use any other libraries** unless stated otherwise in the individual assignment instructions. This also applies to library components, if instructed to use a library for functionality `X` you must not use it for anything but this functionality. That is to say you have to implement everything yourself unless instructed otherwise.
+You are free to use all functionality provided by the [Python standard library](https://docs.python.org/3/library/) and `numpy`. However you are **not allowed to use any other libraries** unless stated otherwise in the individual assignment instructions. This also applies to library components, if instructed to use a library for functionality `X` you must not use it for anything but this functionality. That is to say you have to implement everything yourself unless instructed otherwise.
 
 ## Plagiarism
 
