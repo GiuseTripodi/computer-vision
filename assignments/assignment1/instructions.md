@@ -15,7 +15,7 @@ Then setup, create, and enable a [virtualenv](https://virtualenv.pypa.io/en/stab
 
     pip install numpy opencv-python
 
-The PyTorch setup varies a bit depending on the OS, see [here](https://pytorch.org/). Use a version with CUDA only if you have an Nvidia GPU. In any case, ensure to install the current version of PyTorch, which is 1.8.0. This is the version I'll use for testing all assignments and if they fail due to version issues, you'll get significant point deductions. Confirm this via:
+The PyTorch setup varies a bit depending on the OS, see [here](https://pytorch.org/). Use a version with CUDA only if you have an Nvidia GPU. In any case, ensure to install the current version of PyTorch, which is 1.8.0. This is the version we will use for testing all assignments and if they fail due to version issues, you'll get significant point deductions. Confirm this via:
 
     python -c "import torch; print(torch.__version__)"
 
@@ -41,7 +41,7 @@ Make sure you have the most recent [reference code](https://smithers.cvl.tuwien.
 
 In this part we will implement common functionality for classifier training. As we'll see in the lecture, training and testing is almost always done in mini-batches, with each being a small part of the whole data. To do so, finish the `BatchGenerator` class in `batches.py`. Make sure to read the comments and implement type and value checks accordingly.
 
-The `BatchGenerator`'s constructor has as optional `op` argument that is a function. If this argument is given, the generator will apply this function to the data of every sample before adding it to a batch. This is a flexible mechanism that will later allow us to implement data augmentation. For now we'll use it to transform the data to the form expected by classifiers such as KNN. For this we need to convert the images to float vectors, as covered in the lecture. To do so, implement the `type_cast`, `vectorize`, `add` and `mul` functions inside `ops.py`. These are functions that return other functions. See the `chain` function, which is already implemented for reference. That function allows for chaining other operations together like so:
+The `BatchGenerator`'s constructor has an optional `op` argument that is a function. If this argument is given, the generator will apply this function to the data of every sample before adding it to a batch. This is a flexible mechanism that will later allow us to implement data augmentation. For now we'll use it to transform the data to the form expected by classifiers such as KNN. For this we need to convert the images to float vectors, as covered in the lecture. To do so, implement the `type_cast`, `vectorize`, `add` and `mul` functions inside `ops.py`. These are functions that return other functions. See the `chain` function, which is already implemented for reference. That function allows for chaining other operations together like so:
 
 ```python
 op = ops.chain([
@@ -65,6 +65,61 @@ To test the batch generator make sure the following applies:
 
 Finally we will use accuracy as the performance measure for our classifiers. See the lecture slides for how this measure is defined and implement the `Accuracy` class in `test.py` accordingly. This class supports batch-wise updates which will be handy in the future (we already talked about minibatches in the lecture).
 
+## Part 3
+
+In this part we will implement a simple classifier and test all of the code implemented so far. At this point the classifier will not be a deep neural network. Instead you can choose a more "traditional" type from the `scikit-learn` package. Finish the `SimpleClassifier` in `simple.py` (you can change the class name to better fit your choice of classifier). The goal is not to find the best classifier possible but rather to implement a simple classifier that allows us to obtained baseline results which we can compare future models against. Good choices are types that were already covered in the lecture such as:
+
+1. Nearest Neighbor - see `sklearn.neighbors.KNeighborsClassifier`
+2. Linear classifiers - see `sklearn.linear_model.SGDClassifier`. Here the argument `loss='log'` gives a logistic regression classifier which is equivalent to a linear classifier with softmax normalization and cross entropy loss. Note that `sklearn` also directly implements `sklearn.linear_model.LogisticRegression` which works as well but gives you less parameters to tune (see requirements for `simple_cats_dogs.py` below)
+
+Feel free to try other types of classifiers but stick to "traditional" methods - so stay away from `sklearn.neural_network`. For some bonus points you can implement more than one type.
+
+Finally, combine the functionality implemented so far in a script `simple_cats_dogs.py` that does the following, in this order:
+
+1. Load the training, validation, and test sets as individual `PetsDataset`s.
+2. Create a `BatchGenerator` for each one. Traditional classifiers don't usually train in batches so you can set the minibatch size equal to the number of dataset samples to get a single large batch - unless you choose a classifier that does require multiple batches.
+3. Implement random or grid search (your choice) to tune one ore more hyperparameter values (such as `k` for KNN classifiers). Test at least 10 values. This is not a lot but depending on your choice of classifier and parameters can take a long time.
+4. For each parameter to test, "train" a `SimpleClassifier` and then calculate the accuracy on the validation set.
+5. Report the best parameters found and the corresponding validation accuracy.
+6. Compute and report the accuracy on the test set with these parameters.
+
+Steps 3 to 6 must be implemented in a generic way using a loop, like so:
+
+```python
+for k in range(1, 101, 10):  # grid search example
+    knn = SimpleClassifier(..., k) # KNN classifier example
+    accuracy = Accuracy()
+    # train and compute validation accuracy ...
+    if accuracy > best_accuracy:
+        best_accuracy = accuracy
+        best_k = k
+
+knn = SimpleClassifier(..., best_k)
+# compute test accuracy
+```
+
+## Report
+
+Write a short report (2 to 3 pages) that answers the following questions:
+
+* What is image classification?
+* What is the purpose of the training, validation, and test sets and why do we need all of them?
+* How do nearest neighbor and linear classifiers work?
+
+Also include your results obtained from `simple_cats_dogs.py`. Include the validation accuracies for the different parameters you considered as a table or (better) a plot as well as the final test accuracy. Compare the best validation accuracy and the final test accuracy, and discuss the results.
+
 ## Submission
 
-The deadline for the first assignment is **April 15th at 11pm**. The last part of this assignment will be part 3. It will include details on what to include in the report as well as more submission instructions. Make sure you've read the general assignment information [here](https://smithers.cvl.tuwien.ac.at/theitzinger/dlvc_ss21_public/-/blob/master/assignments/general.md) before your final submission.
+Submit your assignment until **April 15th at 11pm**. To do so, create a zip archive including the report, the complete `dlvc` folder with your implementations as well as `simple_cats_dogs.py`. More precisely, after extracting the archive we should obtain the following:
+
+    group_x/
+        report.pdf
+        simple_cats_dogs.py
+        dlvc/
+            batches.py
+            ...
+            datasets/
+                ...
+            ...
+
+Submit the zip archive in TUWEL. Make sure you've read the general assignment information [here](https://smithers.cvl.tuwien.ac.at/theitzinger/dlvc_ss21_public/-/blob/master/assignments/general.md) before your final submission.
