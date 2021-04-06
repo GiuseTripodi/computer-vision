@@ -43,7 +43,8 @@ class BatchGenerator:
 
     def __len__(self) -> int:
         '''
-        Returns the number of batches generated per iteration.
+        Returns the total number of batches the dataset is split into.
+            This is identical to the total number of batches yielded every time the __iter__ method is called.
         '''
 
         # TODO implement

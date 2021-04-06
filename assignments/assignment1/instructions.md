@@ -54,7 +54,7 @@ op = ops.chain([
 
 We will use the `add()` and `mul()` operations for basic input normalization. The above arguments will scale the vector entries to the interval `[-1, 1]`.
 
-To test the batch generator make sure the following applies:
+To test the batch generator make sure the following applies (the following list assumes that the above op chain is used):
 
 * The number of training batches is `1` if the batch size is set to the number of samples in the dataset
 * The number of training batches is `16` if the batch size is set to 500
@@ -67,7 +67,7 @@ Finally we will use accuracy as the performance measure for our classifiers. See
 
 ## Part 3
 
-In this part we will implement a simple classifier and test all of the code implemented so far. At this point the classifier will not be a deep neural network. Instead you can choose a more "traditional" type from the `scikit-learn` package. Finish the `SimpleClassifier` in `simple.py` (you can change the class name to better fit your choice of classifier). The goal is not to find the best classifier possible but rather to implement a simple classifier that allows us to obtained baseline results which we can compare future models against. Good choices are types that were already covered in the lecture such as:
+In this part we will implement a simple classifier and test all of the code implemented so far. At this point the classifier will not be a deep neural network. Instead you can choose a more "traditional" type from the `scikit-learn` package. Finish the `SimpleClassifier` in `simple.py` (you can change the class name to better fit your choice of classifier but don't change the filename). The goal is not to find the best classifier possible but rather to implement a simple classifier that allows us to obtained baseline results which we can compare future models against. Good choices are types that were already covered in the lecture such as:
 
 1. Nearest Neighbor - see `sklearn.neighbors.KNeighborsClassifier`
 2. Linear classifiers - see `sklearn.linear_model.SGDClassifier`. Here the argument `loss='log'` gives a logistic regression classifier which is equivalent to a linear classifier with softmax normalization and cross entropy loss. Note that `sklearn` also directly implements `sklearn.linear_model.LogisticRegression` which works as well but gives you less parameters to tune (see requirements for `simple_cats_dogs.py` below)

@@ -76,6 +76,7 @@ class Accuracy(PerformanceMeasure):
         '''
         Update the measure by comparing predicted data with ground-truth target data.
         prediction must have shape (s,c) with each row being a class-score vector.
+            The predicted class label is the one with the highest probability.
         target must have shape (s,) and values between 0 and c-1 (true class labels).
         Raises ValueError if the data shape or values are unsupported.
         '''

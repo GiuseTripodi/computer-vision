@@ -38,7 +38,7 @@ class PetsDataset(ClassificationDataset):
     def __getitem__(self, idx: int) -> Sample:
         '''
         Returns the idx-th sample in the dataset.
-        Raises IndexError if the index is out of bounds.
+        Raises IndexError if the index is out of bounds. Negative indices are not supported.
         '''
 
         # TODO implement
