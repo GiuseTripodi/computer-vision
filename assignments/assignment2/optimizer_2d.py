@@ -65,6 +65,8 @@ class Fn:
         '''
 
         # TODO implement
+        # You can simply round and map to integers. If so, make sure not to set eps and learning_rate too low
+        # Alternatively, you can implement some form of interpolation (for example bilinear)
 
         pass
 
