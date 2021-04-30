@@ -53,3 +53,12 @@ def mul(val: float) -> Op:
     # TODO implement (see above for guidance).
 
     pass
+
+def hwc2chw() -> Op:
+    '''
+    Flip a 3D array with shape HWC to shape CHW.
+    '''
+
+    # TODO implement (see np.transpose)
+
+    pass
