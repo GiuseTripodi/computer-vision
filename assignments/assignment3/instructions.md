@@ -7,7 +7,7 @@ Aim for a total effort of around 15 hours including getting the code to run and 
 
 ## Report
 
-Write a short report that answers the following questions:
+Write a short report (3 to 4 pages) that answers the following questions:
 
 * What did you do?
 * Where did you download the code (including links)? Did you change anything and (if so) what?
