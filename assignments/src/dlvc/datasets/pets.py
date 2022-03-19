@@ -39,16 +39,17 @@ class PetsDataset(ClassificationDataset):
         
         batches = subsets[subset]
         batch = self.unpickle(os.path.join(fdir,batches[0]))
-        self.X, self.y = self.get_cats_and_dogs(batch)
+        self.X, self.y = self.get_cats_and_dogs(fdir, batch)
         for batch_f in batches[1:]:
             batch = self.unpickle(os.path.join(fdir,batch_f))
-            x_, y_ = self.get_cats_and_dogs(batch)
+            x_, y_ = self.get_cats_and_dogs(fdir, batch)
             self.X = np.concatenate((self.X, x_), axis=0)
             self.y = np.concatenate((self.y, y_), axis=0)
             
         self.len = self.X.shape[0]
         self.n_classes = np.unique(self.y).shape[0]
-        self.X = self.X.reshape((self.len,32,32,3))
+        self.X = self.X.reshape((self.len,3,32,32)).transpose(0,2,3,1) #array is red, blue, green => 3,32,32 => need for transpose
+        self.X = np.flip(self.X, axis=3) #img is rgb but assignment wants bgr => flip b and r in axis 3
     
     def unpickle(self, file):
         '''
@@ -59,7 +60,7 @@ class PetsDataset(ClassificationDataset):
             dict = pickle.load(fo, encoding='bytes')
         return dict
     
-    def get_cats_and_dogs(self, batch):
+    def get_cats_and_dogs(self, fdir, batch):
         '''
         Returns data x_ and labels y_ from a dictionary filtered by cat and dog class
         '''
@@ -70,7 +71,10 @@ class PetsDataset(ClassificationDataset):
         x_ = np.array(batch[b'data'])
         y_ = np.array(batch[b'labels'])
         filter_mask = np.logical_or(y_ == cat, y_==dog)
-        return x_[filter_mask], y_[filter_mask]
+        y_ = y_[filter_mask]
+        y_[y_==cat]=0
+        y_[y_==dog]=1
+        return x_[filter_mask], y_
 
     def __len__(self) -> int:
         '''
